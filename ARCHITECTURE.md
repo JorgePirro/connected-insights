@@ -84,8 +84,6 @@ C4Context
     Rel(insightsService, insightsDb, "Reads/Writes", "JPA/JDBC")
     Rel(notificationService, notificationDb, "Reads/Writes", "JPA/JDBC")
 
-    Rel(notificationService, insightsService, "Fetches Insights", "HTTP/REST")
-    Rel(insightsService, competitorService, "Fetches Competitor data", "HTTP/REST")
 ```
 
 ### Component Overview
