@@ -8,6 +8,17 @@
 
 ---
 
+## Repository
+
+Clone the repository:
+
+```bash
+git clone https://github.com/JorgePirro/connected-insights.git
+cd connected-insights
+```
+
+---
+
 ## Overview
 
 **Connected Insights** is a microservices-based Competitive Intelligence Platform developed for AstraZeneca's Enterprise AI team. The platform enables leadership and analysts to:
