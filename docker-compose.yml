@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  competitor-service:
+    build: ./services/competitor-service
+    ports:
+      - "8081:8080" # Maps localhost:8081 to container:8080
+    container_name: competitor-service
+    environment:
+      - SERVER_PORT=8080
+
+  insights-service:
+    build: ./services/insights-service
+    ports:
+      - "8082:8080"
+    container_name: insights-service
+    environment:
+      - SERVER_PORT=8080
+
+  notification-service:
+    build: ./services/notification-service
+    ports:
+      - "8083:8080"
+    container_name: notification-service
+    environment:
+      - SERVER_PORT=8080

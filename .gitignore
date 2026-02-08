@@ -1,0 +1,97 @@
+# ==============================================================================
+# Maven / Java Build Artifacts
+# ==============================================================================
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven Wrapper (Optional: Comment these out if you WANT to commit the wrapper)
+# .mvn/wrapper/maven-wrapper.jar
+
+# ==============================================================================
+# IDEs & Editors
+# ==============================================================================
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ==============================================================================
+# Operating System Files
+# ==============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ==============================================================================
+# Logs & Temporary Files
+# ==============================================================================
+*.log
+logs/
+temp/
+tmp/
+*.swp
+
+# ==============================================================================
+# Docker & Containers
+# ==============================================================================
+# Ignore local docker-compose overrides
+docker-compose.override.yml
+
+# Ignore local container data if you map volumes to the host
+.docker/
+postgres-data/
+h2-data/
+
+# ==============================================================================
+# Security & Environment Variables
+# ==============================================================================
+# CRITICAL: Never commit secrets or local environment configs
+.env
+.env.local
+*.pem
+*.key
+secrets/
+
+# ==============================================================================
+# Testing
+# ==============================================================================
+# Coverage reports
+jacoco.exec
+*.exec
+coverage/
