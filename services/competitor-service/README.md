@@ -34,6 +34,9 @@ competitor-service/
 │       └── CompetitorService.java  # Implements Input Port
 │
 └── infrastructure/                  # INFRASTRUCTURE LAYER (Adapters)
+    ├── config/
+    │   └── OpenApiConfig.java       # Swagger/OpenAPI Configuration
+    │
     ├── persistence/                 # Persistence Adapter
     │   ├── entity/
     │   │   ├── CompetitorEntity.java         # JPA Annotations
@@ -52,6 +55,11 @@ competitor-service/
         │   ├── CreateCompetitorRequest.java
         │   ├── CompetitorResponse.java
         │   └── AddTrialRequest.java
+        ├── exception/
+        │   ├── GlobalExceptionHandler.java   # @RestControllerAdvice
+        │   ├── ErrorResponse.java            # Standard Error DTO
+        │   ├── ResourceNotFoundException.java
+        │   └── DuplicateResourceException.java
         └── mapper/
             └── WebMapper.java               # MapStruct: DTO <-> Domain
 ```
@@ -72,6 +80,7 @@ competitor-service/
 - **Persistence Adapter**: Implements domain repository interface, uses JPA
 - **Web Adapter**: REST controllers, DTOs, handles HTTP requests
 - **MapStruct Mappers**: Clean separation between layers
+- **Global Exception Handler**: Consistent error responses
 
 ## API Endpoints
 
@@ -83,13 +92,13 @@ Interactive API documentation with try-it-out functionality
 
 ### OpenAPI Specification
 ```
-GET /api-docs
+GET /v3/api-docs
 ```
 JSON format of the OpenAPI specification
 
 ### Health Check
 ```
-GET /health
+GET /actuator/health
 ```
 
 ### Competitor Operations
@@ -145,12 +154,12 @@ mvnw spring-boot:run
 ### Access
 - Application: http://localhost:8081
 - **Swagger UI: http://localhost:8081/swagger-ui.html** 📚
-- API Docs (JSON): http://localhost:8081/api-docs
+- API Docs (JSON): http://localhost:8081/v3/api-docs
 - H2 Console: http://localhost:8081/h2-console
   - JDBC URL: `jdbc:h2:mem:competitordb`
   - Username: `sa`
   - Password: (empty)
-- Health: http://localhost:8081/health
+- Health: http://localhost:8081/actuator/health
 
 ## Testing Examples
 
@@ -172,7 +181,7 @@ curl http://localhost:8081/api/competitors
 
 ### Add Clinical Trial
 ```bash
-curl -X POST http://localhost:8081/api/competitors/1/trials \
+curl -X POST http://localhost:8081/api/competitors/{id}/trials \
   -H "Content-Type: application/json" \
   -d '{
     "trialId": "NCT98765432",
@@ -183,6 +192,28 @@ curl -X POST http://localhost:8081/api/competitors/1/trials \
   }'
 ```
 
+## Error Handling
+
+The service uses a `GlobalExceptionHandler` for consistent error responses:
+
+### Error Response Format
+```json
+{
+  "timestamp": "2026-02-08T10:30:00",
+  "status": 400,
+  "error": "Validation Failed",
+  "message": "{name=Name is required}"
+}
+```
+
+### Handled Exceptions
+| Exception | HTTP Status | Description |
+|-----------|-------------|-------------|
+| `MethodArgumentNotValidException` | 400 | Validation errors |
+| `ResourceNotFoundException` | 404 | Resource not found |
+| `DuplicateResourceException` | 409 | Duplicate resource |
+| `Exception` | 500 | Internal server error |
+
 ## Design Decisions
 
 1. **Domain Purity**: Domain models are pure Java POJOs with no framework dependencies
@@ -190,13 +221,14 @@ curl -X POST http://localhost:8081/api/competitors/1/trials \
 3. **MapStruct**: Clean, type-safe mapping between layers
 4. **Bidirectional JPA Relations**: Handled in persistence layer only
 5. **Transaction Management**: Applied at application service layer
-6. **Exception Handling**: Basic RuntimeException (can be enhanced with custom exceptions)
+6. **Global Exception Handling**: Consistent error responses with `@RestControllerAdvice`
 7. **API Documentation**: SpringDoc OpenAPI 3 with comprehensive Swagger annotations
+8. **Validation**: Bean validation on request DTOs (`@Valid`, `@NotBlank`, etc.)
 
 ## Future Enhancements
 
-- Custom exception handling with `@ControllerAdvice`
-- Validation annotations on DTOs (`@Valid`, `@NotNull`, etc.)
 - Integration tests for full flow
 - Docker support
 - Metrics and monitoring
+- Pagination for list endpoints
+- Search and filtering capabilities
